@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 const style = {
   position: 'absolute',
@@ -17,7 +16,10 @@ const style = {
 import './HomePages.css'
 import { toast } from 'react-toastify';
 import { DeleteOutlined, EditOutlined, FolderAddOutlined } from '@ant-design/icons';
-const HomePages = () => {
+import axios from 'axios';
+import { message, Modal } from 'antd';
+const HomePages = () => { 
+  // get api table 
   const [info, setInfo] = useState([])
   const getInfo=() =>{
     fetch('https://autoapi.dezinfeksiyatashkent.uz/api/categories')
@@ -26,15 +28,12 @@ const HomePages = () => {
     })
     .then((data) => {
       setInfo(data?.data)
-      // console.log(data?.data);
-      // setPhotos(data);
     });
   }
   useEffect(() => {
    getInfo()
   }, []);
-
-// post  modal 
+// post  api modal 
 const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -70,6 +69,36 @@ const [open, setOpen] = useState(false);
        .catch((err) => {
           console.log(err?.message);
        });
+  }
+
+
+  // Delete api modal 
+  const deleteInfo = (id) =>{
+    Modal.confirm({
+      title: "Delete Category",
+      content: "Are you sure you want to delete this category?",
+      maskClosable: true, // Allow closing by clicking outside the modal
+      onOk() {
+          const headers = {
+              Authorization: `Bearer ${token}`,
+          }
+          axios({
+              url: `https://autoapi.dezinfeksiyatashkent.uz/api/categories/${id}`,
+              method: 'DELETE',
+              headers: headers,
+          }).then((res) => {
+              console.log(res);
+              message.success(`Muvaffaqiyatli o'chirildi !`)
+              getInfo()
+          }).catch((err) => {
+              console.log("Error", err);
+          })
+      },
+      onCancel() {
+          console.log('Cancel');
+          // onCancel={closeModal}
+      },
+  });
   }
   return (
     <div className='home'>
@@ -113,7 +142,7 @@ const [open, setOpen] = useState(false);
               <tr key={index}>
               <td>{item?.name_en}</td>
               <td>{item?.name_ru}</td>
-              <td> <img src={`https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/${item?.image_src}`} alt="" /><DeleteOutlined  className='outlined'/><EditOutlined className='editoutlined' /></td>
+              <td> <img src={`https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/${item?.image_src}`} alt="" /><DeleteOutlined onClick={()=>deleteInfo(item?.id)}  className='outlined'/><EditOutlined className='editoutlined' /></td>
             </tr>
             ))}
           
