@@ -48,8 +48,8 @@ const LoginPage = () => {
     <div className="LoginPage">
       <div className="container">
     <form className='loginPage-form'>
-      <input type="text" onChange={(e) =>setRaqam(e?.target?.value)} />
-      <input type="text" onChange={(e) =>setParol(e?.target?.value)}/>
+      <input type="text" onChange={(e) =>setRaqam(e?.target?.value)} placeholder='Raqam kiriting ...'/>
+      <input type="text" onChange={(e) =>setParol(e?.target?.value)} placeholder='parol kiriting...'/>
       <button onClick={handleSubmit}>Login qilish </button>
 
 

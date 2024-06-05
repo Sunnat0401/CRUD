@@ -73,7 +73,7 @@ const [open, setOpen] = useState(false);
   return (
     <div className='home'>
       <div className="container">
-      <div>
+      <div className='infoCreate'>
       <Button onClick={handleOpen}>Element Qoshish</Button>
       <Modal
         open={open}
