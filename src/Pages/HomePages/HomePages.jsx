@@ -16,6 +16,7 @@ const style = {
 
 import './HomePages.css'
 import { toast } from 'react-toastify';
+import { DeleteOutlined, EditOutlined, FolderAddOutlined } from '@ant-design/icons';
 const HomePages = () => {
   const [info, setInfo] = useState([])
   const getInfo=() =>{
@@ -73,7 +74,8 @@ const [open, setOpen] = useState(false);
   return (
     <div className='home'>
       <div className="container">
-      <div className='infoCreate'>
+      <div className="infoCreate">
+      <div >
       <Button onClick={handleOpen}>Element Qoshish</Button>
       <Modal
         open={open}
@@ -82,15 +84,16 @@ const [open, setOpen] = useState(false);
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-        <form>
+        <form className='post-form'>
              <input type="text " required placeholder="name_en" onChange={(e) =>setNameEn(e?.target?.value)}/>
              <input type="text " required placeholder="name_ru" onChange={(e)=>setNameRu(e?.target?.value)}/>
-             <input type="file" accept='image/*' required  onChange={(e)=>setPicture(e?.target?.files[0])}/>
+             <input className='post-file' type="file" accept='image/*' required  onChange={(e)=>setPicture(e?.target?.files[0])}/>
              <button type="submit" onClick={InfoCreate}>Qo'shish</button>
         </form>
         </Box>
       </Modal>
     </div>
+      </div>
         <table>
           <thead>
             <tr>
@@ -110,7 +113,7 @@ const [open, setOpen] = useState(false);
               <tr key={index}>
               <td>{item?.name_en}</td>
               <td>{item?.name_ru}</td>
-              <td> <img src={`https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/${item?.image_src}`} alt="" /></td>
+              <td> <img src={`https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/${item?.image_src}`} alt="" /><DeleteOutlined  className='outlined'/><EditOutlined className='editoutlined' /></td>
             </tr>
             ))}
           

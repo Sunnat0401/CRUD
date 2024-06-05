@@ -10,8 +10,15 @@ tbody{
 table , th, td{
     border: 1px solid black;
 }
+table{
+    margin: 0 auto;
+}
+th{
+    padding: 10px 0;
+}
 td{
-    width: 300px;
+    width: 350px;
+    text-align: center;
 }
 td img{
     width: 130px;
@@ -40,4 +47,30 @@ form button{
     border-radius: 10px;
     border: none;
     margin: 5px 0;
+}
+.infoCreate{
+    margin: 0 auto;
+}
+.infoCreate{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
+}
+.post-file{
+    padding: 6px 0;
+}
+.btn{
+
+}
+.outlined{
+    font-size: 20px;
+    color: red;
+    margin: 20px 10px;
+}
+.editoutlined{
+    display: inline-block;
+    font-size: 20px;
+    color:green;
+    margin: 20px 10px;
 }
