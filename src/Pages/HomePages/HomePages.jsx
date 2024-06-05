@@ -91,7 +91,7 @@ const HomePages = () => {
         })
         .then((res) => {
           console.log(res?.data);
-          // toast.success(res?.message);
+          toast.success(res?.data?.message);
           getInfo();
         })
         .catch((err) => {
