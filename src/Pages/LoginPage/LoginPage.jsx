@@ -1,12 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import './LoginPage.css'
 const LoginPage = () => {
   const [raqam, setRaqam] = useState('')
   const [parol, setParol] = useState('')
   const navigate = useNavigate()
+  const token = localStorage.getItem('accesstoken')
+  useEffect(()=>{
+        if(token) {
+          navigate('/home')
+        }else{
+          navigate('/')
+        }
+  }, [])
   // console.log(raqam , parol);
   const handleSubmit = (e) =>{
     e.preventDefault()
@@ -37,12 +45,16 @@ const LoginPage = () => {
        });
   }
   return (
-    <div>
+    <div className="LoginPage">
+      <div className="container">
+    <form className='loginPage-form'>
       <input type="text" onChange={(e) =>setRaqam(e?.target?.value)} />
       <input type="text" onChange={(e) =>setParol(e?.target?.value)}/>
       <button onClick={handleSubmit}>Login qilish </button>
 
 
+    </form>
+      </div>
     </div>
   )
 }
