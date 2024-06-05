@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import React, { useEffect, useState } from 'react';
+import './HomePages.css';
+import { toast } from 'react-toastify';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import axios from 'axios';
+import { Button, message, Modal } from 'antd';
+import { Box } from '@mui/material';
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -13,144 +18,154 @@ const style = {
   p: 4,
 };
 
-import './HomePages.css'
-import { toast } from 'react-toastify';
-import { DeleteOutlined, EditOutlined, FolderAddOutlined } from '@ant-design/icons';
-import axios from 'axios';
-import { message, Modal } from 'antd';
 const HomePages = () => { 
-  // get api table 
-  const [info, setInfo] = useState([])
-  const getInfo=() =>{
+  // Get API table 
+  const [info, setInfo] = useState([]);
+  
+  const getInfo = () => {
     fetch('https://autoapi.dezinfeksiyatashkent.uz/api/categories')
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      setInfo(data?.data)
-    });
-  }
+      .then((res) => res.json())
+      .then((data) => {
+        setInfo(data?.data);
+      });
+  };
+
   useEffect(() => {
-   getInfo()
+    getInfo();
   }, []);
-// post  api modal 
-const [open, setOpen] = useState(false);
+
+  // Post API modal 
+  const [open, setOpen] = useState(false);
+  const [nameEn, setNameEn] = useState('');
+  const [nameRu, setNameRu] = useState('');
+  const [picture, setPicture] = useState(null);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [nameEn, setNameEn] = useState()
-  const [nameRu, setNameRu] = useState()
-  const [picture, setPicture] = useState()
-  const token = localStorage.getItem('accesstoken')
-  const formData = new FormData();
-  formData.append("name_en" , nameEn);
-  formData.append("name_ru" , nameRu);
-  formData.append("images" , picture);
-  const InfoCreate = (e) =>{
-    e.preventDefault()
+
+  const InfoCreate = (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('accesstoken');
+    const formData = new FormData();
+    formData.append('name_en', nameEn);
+    formData.append('name_ru', nameRu);
+    formData.append('images', picture);
+
     fetch('https://autoapi.dezinfeksiyatashkent.uz/api/categories', {
       method: 'POST',
       body: formData,
       headers: {
-        // 'Content-type': 'multipart/form-data',
-"Authorization": ` Bearer ${token}`
+        "Authorization": `Bearer ${token}`
       },
     })
-       .then((response) => response.json())
-       .then((data) => {
-          console.log(data?.message)
-          if(data?.success){
-            toast.success(data?.message)
-            handleClose()
-            getInfo()
-          }else{
-            toast.error(data?.message)
-          }
-       })
-       .catch((err) => {
-          console.log(err?.message);
-       });
-  }
+    .then((response) => response.json())
+    .then((data) => {
+      if (data?.success) {
+        toast.success(data?.message);
+        handleClose();
+        getInfo();
+      } else {
+        toast.error(data?.message);
+      }
+    })
+    .catch((err) => {
+      console.log(err?.message);
+    });
+  };
 
-
-  // Delete api modal 
-  const deleteInfo = (id) =>{
+  // Delete API modal 
+  const deleteInfo = (id) => {
     Modal.confirm({
       title: "Delete Category",
       content: "Are you sure you want to delete this category?",
       maskClosable: true, // Allow closing by clicking outside the modal
       onOk() {
-          const headers = {
-              Authorization: `Bearer ${token}`,
-          }
-          axios({
-              url: `https://autoapi.dezinfeksiyatashkent.uz/api/categories/${id}`,
-              method: 'DELETE',
-              headers: headers,
-          }).then((res) => {
-              console.log(res);
-              message.success(`Muvaffaqiyatli o'chirildi !`)
-              getInfo()
-          }).catch((err) => {
-              console.log("Error", err);
-          })
+        const token = localStorage.getItem('accesstoken');
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+        axios({
+          url: `https://autoapi.dezinfeksiyatashkent.uz/api/categories/${id}`,
+          method: 'DELETE',
+          headers: headers,
+        })
+        .then((res) => {
+          console.log(res?.data);
+          // toast.success(res?.message);
+          getInfo();
+        })
+        .catch((err) => {
+          console.log("Error", err);
+          toast.error(err?.message);
+        });
       },
       onCancel() {
-          console.log('Cancel');
-          // onCancel={closeModal}
+        console.log('Cancel');
       },
-  });
-  }
+    });
+  };
+
   return (
     <div className='home'>
       <div className="container">
-      <div className="infoCreate">
-      <div >
-      <Button onClick={handleOpen}>Element Qoshish</Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-        <form className='post-form'>
-             <input type="text " required placeholder="name_en" onChange={(e) =>setNameEn(e?.target?.value)}/>
-             <input type="text " required placeholder="name_ru" onChange={(e)=>setNameRu(e?.target?.value)}/>
-             <input className='post-file' type="file" accept='image/*' required  onChange={(e)=>setPicture(e?.target?.files[0])}/>
-             <button type="submit" onClick={InfoCreate}>Qo'shish</button>
-        </form>
-        </Box>
-      </Modal>
-    </div>
-      </div>
+        <div className="infoCreate">
+          <Button onClick={handleOpen}>Element Qoshish</Button>
+          <Modal
+            open={open}
+            onCancel={handleClose}
+            footer={null}
+          >
+        
+              <form style={{marginTop:'50px'}} className='post-form' onSubmit={InfoCreate}>
+                <input 
+                  type="text" 
+                  required 
+                  placeholder="name_en" 
+                  onChange={(e) => setNameEn(e.target.value)} 
+                />
+                <input 
+                  type="text" 
+                  required 
+                  placeholder="name_ru" 
+                  onChange={(e) => setNameRu(e.target.value)} 
+                />
+                <input 
+                  className='post-file' 
+                  type="file" 
+                  accept='image/*' 
+                  required  
+                  onChange={(e) => setPicture(e.target.files[0])} 
+                />
+                <button type="submit">Qo'shish</button>
+              </form>
+     
+          </Modal>
+        </div>
         <table>
           <thead>
             <tr>
-              <th>
-                Inglizcha 
-              </th>
-              <th>
-                ruscha  
-              </th>
-              <th>
-                rasmlar 
-              </th>
+              <th>Inglizcha</th>
+              <th>Ruscha</th>
+              <th>Rasmlar</th>
             </tr>
           </thead>
           <tbody>
-            {info?.map((item, index) =>(
+            {info?.map((item, index) => (
               <tr key={index}>
-              <td>{item?.name_en}</td>
-              <td>{item?.name_ru}</td>
-              <td> <img src={`https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/${item?.image_src}`} alt="" /><DeleteOutlined onClick={()=>deleteInfo(item?.id)}  className='outlined'/><EditOutlined className='editoutlined' /></td>
-            </tr>
+                <td>{item?.name_en}</td>
+                <td>{item?.name_ru}</td>
+                <td>
+                  <img src={`https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/${item?.image_src}`} alt="" />
+                  <DeleteOutlined onClick={() => deleteInfo(item?.id)} className='outlined' />
+                  <EditOutlined className='editoutlined' />
+                </td>
+              </tr>
             ))}
-          
           </tbody>
         </table>
       </div>
     </div>
-  )
+  );
 }
 
-export default HomePages
+export default HomePages;
