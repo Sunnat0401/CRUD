@@ -91,3 +91,10 @@ form button{
     padding: 7px 50px;
     text-align: center;
 }
+.put-wrapper{
+    display: flex;
+}
+.put-imgs{
+    width: 90px;
+    height: 90px;
+}
