@@ -74,3 +74,20 @@ form button{
     color:green;
     margin: 20px 10px;
 }
+.edit-img{
+    width: 90px;
+    height: 90px;
+    border-radius: 6px;
+}
+.img-wrapper{
+    margin: 10px 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+.img-wrapper .edit-inputs{
+    padding: 7px 50px;
+    text-align: center;
+}
