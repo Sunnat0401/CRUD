@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { Button, Modal } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const HomePages = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -51,7 +52,7 @@ const HomePages = () => {
       .then((response) => response.json())
       .then((data) => {
         if (data?.success) {
-          toast.success(data?.message);
+          toast.success(data?.message , "Yuborildi");
           handleClose();
           getInfo();
         } else {
@@ -151,11 +152,21 @@ const HomePages = () => {
     reader.readAsDataURL(file);
   };
 
+
+  // exit 
+  const navigate = useNavigate(); // Use navigate
+  const exit = (e) => {
+    e.preventDefault();
+    localStorage.removeItem('accesstoken');
+    navigate('/'); // Redirect to login page
+  };
+  console.log(exit);
   return (
     <div className="home">
       <div className="container">
         <div className="infoCreate">
           <Button onClick={handleOpen}>Element Qoshish</Button>
+          <button className="btn-exit" onClick={exit}>Chiqish</button>
           <Modal open={open} onCancel={handleClose} footer={null}>
             <form
               style={{ marginTop: "50px" }}

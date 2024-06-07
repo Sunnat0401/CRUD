@@ -98,3 +98,16 @@ form button{
     width: 90px;
     height: 90px;
 }
+.btn-exit{
+   width: 100px;
+   height: 29px;
+   margin-left: 150px;
+   cursor: pointer;
+   border: none;
+   border-radius: 4px;
+   transition: all 0.5s ease;
+}
+.btn-exit:hover{
+    background-color: #2c5e77;
+    color: white;
+}
