@@ -3,7 +3,7 @@ import "./HomePages.css";
 import { toast } from "react-toastify";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import axios from "axios";
-import { Button, Modal } from "antd";
+import { Button, message, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 
 const HomePages = () => {
@@ -52,11 +52,11 @@ const HomePages = () => {
       .then((response) => response.json())
       .then((data) => {
         if (data?.success) {
-          toast.success(data?.message , "Yuborildi");
+          message.success(data?.message);
           handleClose();
           getInfo();
         } else {
-          toast.error(data?.message);
+          message.error(data?.message);
         }
       })
       .catch((err) => {
@@ -80,12 +80,12 @@ const HomePages = () => {
           headers: headers,
         })
           .then((res) => {
-            toast.success(res?.data?.message);
+            message.success(res?.data?.message);
             getInfo();
           })
           .catch((err) => {
             console.log("Error", err);
-            toast.error(err?.message);
+            message.error(err?.message);
           });
       },
       onCancel() {
@@ -127,11 +127,11 @@ const HomePages = () => {
       .then((response) => response.json())
       .then((data) => {
         if (data?.success) {
-          toast.success(data?.message);
+          message.success(data?.message);
           closeEditModal();
           getInfo();
         } else {
-          toast.error(data?.message);
+          message.error(data?.message);
         }
       })
       .catch((err) => {

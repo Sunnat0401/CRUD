@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './LoginPage.css';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 
 const LoginPage = () => {
   const [raqam, setRaqam] = useState('');
@@ -11,13 +11,13 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('accesstoken');
 
-  useEffect(()=>{
-        if(token) {
-          navigate('/home')
-        }else{
-          navigate('/')
-        }
-  }, [])
+  useEffect(() => {
+    if (token) {
+      navigate('/home');
+    } else {
+      navigate('/');
+    }
+  }, [token, navigate]); // `token` va `navigate` ni bog'liqlikka qo'shish
 
   const handleSubmit = (values) => {
     fetch('https://autoapi.dezinfeksiyatashkent.uz/api/auth/signin', {
@@ -32,9 +32,9 @@ const LoginPage = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data?.data?.tokens?.accessToken?.token);
+        console.log(data?.message);
         if (data?.success === true) {
-          toast.success(data?.message);
+          message.success(data?.message);
           localStorage.setItem('accesstoken', data?.data?.tokens?.accessToken?.token);
           navigate('/home');
         } else {
@@ -44,6 +44,7 @@ const LoginPage = () => {
       })
       .catch((err) => {
         console.log(err.message);
+        toast.error('Xatolik yuz berdi!'); // Xatolik bo'lganida toast error ko'rsatish
       });
   };
 
@@ -62,7 +63,7 @@ const LoginPage = () => {
             name="phone_number"
             rules={[{ required: true, message: 'Iltimos, telefon raqamingizni kiriting!' }]}
           >
-            <Input className="input" onChange={(e)=>setRaqam(e?.target?.value)} />
+            <Input className="input" onChange={(e) => setRaqam(e?.target?.value)} />
           </Form.Item>
 
           <Form.Item
@@ -70,7 +71,7 @@ const LoginPage = () => {
             name="password"
             rules={[{ required: true, message: 'Iltimos, parolingizni kiriting!' }]}
           >
-            <Input.Password className="inputp"  onChange={(e)=>setParol(e?.target?.value)}/>
+            <Input.Password className="inputp" onChange={(e) => setParol(e?.target?.value)} />
           </Form.Item>
 
           <Form.Item>
