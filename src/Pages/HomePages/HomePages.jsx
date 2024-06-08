@@ -7,6 +7,8 @@ import { Button, message, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 
 const HomePages = () => {
+  const [loading, setLoading] = useState(false)
+  const [load, setLoad] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null); // For displaying the selected image
 
@@ -35,6 +37,7 @@ const HomePages = () => {
   const handleClose = () => setOpen(false);
 
   const InfoCreate = (e) => {
+    setLoad(true)
     e.preventDefault();
     const token = localStorage.getItem("accesstoken");
     const formData = new FormData();
@@ -61,7 +64,9 @@ const HomePages = () => {
       })
       .catch((err) => {
         console.log(err?.message);
-      });
+      }).finally(()=>{
+        setLoad(false)
+      })
   };
 
   const deleteInfo = (id) => {
@@ -108,6 +113,7 @@ const HomePages = () => {
   };
 
   const updateInfo = (e) => {
+    setLoading(true)
     e.preventDefault();
     const token = localStorage.getItem("accesstoken");
     const formData = new FormData();
@@ -136,7 +142,9 @@ const HomePages = () => {
       })
       .catch((err) => {
         console.log(err?.message);
-      });
+      }).finally(()=>{
+        setLoading(false)
+      })
   };
 
   // Handle image selection
@@ -192,7 +200,7 @@ const HomePages = () => {
                 required
                 onChange={(e) => setPicture(e.target.files[0])}
               />
-              <button type="submit">Qo'shish</button>
+              <button type="submit" load={load} disabled={load}>{load ? "Qoshilmoqda" :"Qo'shish"}</button>
             </form>
           </Modal>
         </div>
@@ -257,7 +265,7 @@ const HomePages = () => {
               onChange={handleImageSelect}
             />
           </div>
-          <button type="submit">send</button>
+          <button type="submit" loading={loading} disabled={loading}>{ loading ? 'Sending' : "Send"}</button>
         </form>
       </Modal>
     </div>
