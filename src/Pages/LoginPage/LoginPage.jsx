@@ -13,7 +13,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (token) {
-      navigate('/home');
+      navigate('/homes');
     } else {
       navigate('/');
     }
